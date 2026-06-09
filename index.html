@@ -16,7 +16,8 @@
     --accent: #e63946;
     --muted: #6b7280;
     --rule: #e0dbd3;
-    --rank-colors: #e63946, #f4803a, #f9b233, #4caf7d, #2196f3, #9c27b0, #00bcd4, #ff5722, #607d8b, #795548;
+    --sidebar-bg: #f2efe9;
+    --card-active: #0f1923;
   }
 
   body {
@@ -24,7 +25,9 @@
     color: var(--ink);
     font-family: 'Noto Sans TC', sans-serif;
     font-weight: 300;
-    line-height: 1.7;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 
   /* ── HEADER ── */
@@ -32,161 +35,252 @@
     background: var(--header-bg);
     color: #fff;
     padding: 0 2rem;
+    flex-shrink: 0;
   }
 
   .header-inner {
-    max-width: 860px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 2.5rem 0 2rem;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 2rem 0 1.5rem;
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
     gap: 1rem;
     flex-wrap: wrap;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
   }
 
   .masthead {
     font-family: 'DM Serif Display', 'Noto Serif TC', serif;
-    font-size: clamp(2rem, 6vw, 3.2rem);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
     letter-spacing: -0.02em;
     line-height: 1;
   }
 
-  .masthead span {
-    color: var(--accent);
-  }
+  .masthead span { color: var(--accent); }
 
-  .header-meta {
-    text-align: right;
-  }
+  .header-meta { text-align: right; }
 
   .header-date {
-    font-size: 0.8rem;
-    color: rgba(255,255,255,0.5);
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.45);
     letter-spacing: 0.12em;
     text-transform: uppercase;
   }
 
   .header-tagline {
-    font-size: 0.75rem;
-    color: rgba(255,255,255,0.35);
-    margin-top: 0.25rem;
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.25);
+    margin-top: 0.2rem;
   }
 
   .header-strip {
-    max-width: 860px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 0.75rem 0;
-    font-size: 0.72rem;
-    color: rgba(255,255,255,0.35);
-    letter-spacing: 0.08em;
+    padding: 0.6rem 0;
+    font-size: 0.68rem;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.1em;
     text-transform: uppercase;
   }
 
-  /* ── MAIN ── */
-  main {
-    max-width: 860px;
+  /* ── LAYOUT ── */
+  .layout {
+    display: flex;
+    flex: 1;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 2.5rem 2rem 4rem;
+    width: 100%;
   }
 
-  .section-label {
-    font-size: 0.68rem;
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--rule);
+    padding: 1.5rem 1rem;
+    overflow-y: auto;
+    max-height: calc(100vh - 110px);
+    position: sticky;
+    top: 0;
+  }
+
+  .sidebar-label {
+    font-size: 0.65rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--muted);
     border-top: 2px solid var(--ink);
-    padding-top: 0.5rem;
+    padding-top: 0.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .date-card {
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 0.6rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .date-card:hover { border-color: #bbb; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+
+  .date-card.active {
+    background: var(--card-active);
+    border-color: var(--card-active);
+  }
+
+  .date-card-accent {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  .date-card.active .date-card-accent { opacity: 1; }
+
+  .date-card-date {
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+  }
+
+  .date-card.active .date-card-date { color: rgba(255,255,255,0.45); }
+
+  .date-card-headline {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    line-height: 1.45;
+    color: var(--ink);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .date-card.active .date-card-headline { color: #fff; }
+
+  .date-card-count {
+    font-size: 0.62rem;
+    color: var(--muted);
+    margin-top: 0.35rem;
+  }
+
+  .date-card.active .date-card-count { color: rgba(255,255,255,0.35); }
+
+  /* ── MAIN ── */
+  .content {
+    flex: 1;
+    padding: 2rem 2.5rem 4rem;
+    min-width: 0;
+  }
+
+  .content-header {
     margin-bottom: 1.8rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .content-date-label {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+  }
+
+  .content-count-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-top: 2px solid var(--ink);
+    padding-top: 0.4rem;
+    margin-bottom: 1.5rem;
   }
 
   /* ── NEWS CARD ── */
-  .news-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
+  .news-list { display: flex; flex-direction: column; }
 
   .news-card {
     display: grid;
-    grid-template-columns: 3.5rem 1fr;
+    grid-template-columns: 3rem 1fr;
     gap: 0 1.5rem;
-    padding: 1.6rem 0;
+    padding: 1.5rem 0;
     border-bottom: 1px solid var(--rule);
-    position: relative;
-    transition: background 0.15s;
+    transition: background 0.12s;
   }
 
   .news-card:hover {
     background: rgba(0,0,0,0.02);
-    margin: 0 -1rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    margin: 0 -0.8rem;
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
     border-radius: 4px;
   }
 
-  /* 排名條 — 簽名元素 */
   .rank-col {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 0.2rem;
-  }
-
-  .rank-bar {
-    width: 3px;
-    height: 100%;
-    min-height: 60px;
-    border-radius: 2px;
-    flex: 1;
+    padding-top: 0.1rem;
   }
 
   .rank-num {
     font-family: 'DM Serif Display', serif;
-    font-size: 1.5rem;
+    font-size: 1.45rem;
     line-height: 1;
-    margin-bottom: 0.5rem;
-    font-weight: 400;
+    margin-bottom: 0.4rem;
   }
 
-  .content-col {}
+  .rank-bar {
+    width: 3px;
+    flex: 1;
+    min-height: 36px;
+    border-radius: 2px;
+  }
 
   .news-source {
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--muted);
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.3rem;
   }
 
   .news-title {
     font-family: 'Noto Serif TC', serif;
-    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    font-size: clamp(0.98rem, 2vw, 1.12rem);
     font-weight: 700;
-    line-height: 1.45;
-    margin-bottom: 0.5rem;
-    color: var(--ink);
+    line-height: 1.5;
+    margin-bottom: 0.45rem;
   }
 
   .news-desc {
-    font-size: 0.88rem;
+    font-size: 0.86rem;
     color: #444;
-    line-height: 1.75;
+    line-height: 1.8;
   }
 
-  /* ── FOOTER ── */
-  footer {
-    text-align: center;
-    padding: 2rem;
-    font-size: 0.72rem;
-    color: var(--muted);
-    border-top: 1px solid var(--rule);
-    max-width: 860px;
-    margin: 0 auto;
-  }
-
-  /* ── LOADING / ERROR ── */
+  /* ── STATE ── */
   .state-msg {
     text-align: center;
     padding: 4rem 2rem;
@@ -201,15 +295,32 @@
     margin-bottom: 0.5rem;
   }
 
-  @media (max-width: 520px) {
-    .header-inner { flex-direction: column; align-items: flex-start; }
-    .header-meta { text-align: left; }
-    .news-card { grid-template-columns: 2.8rem 1fr; gap: 0 1rem; }
-    .rank-num { font-size: 1.2rem; }
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.68rem;
+    color: var(--muted);
+    border-top: 1px solid var(--rule);
+    background: var(--sidebar-bg);
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .news-card { transition: none; }
+  @media (max-width: 680px) {
+    .layout { flex-direction: column; }
+    .sidebar {
+      width: 100%;
+      max-height: none;
+      position: static;
+      display: flex;
+      gap: 0.6rem;
+      overflow-x: auto;
+      padding: 1rem;
+      border-right: none;
+      border-bottom: 1px solid var(--rule);
+    }
+    .sidebar-label { display: none; }
+    .date-card { min-width: 170px; margin-bottom: 0; flex-shrink: 0; }
+    .content { padding: 1.5rem 1rem 3rem; }
   }
 </style>
 </head>
@@ -226,71 +337,153 @@
   <div class="header-strip">全球 &amp; 台灣 · 前十大熱門話題</div>
 </header>
 
-<main>
-  <div class="section-label">今日焦點報導</div>
-  <div class="news-list" id="newsList">
-    <div class="state-msg"><strong>載入中⋯</strong>正在讀取今日新聞資料</div>
-  </div>
-</main>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-label">歷史日期</div>
+    <div id="dateList"><div style="font-size:0.8rem;color:var(--muted);padding:0.5rem 0;">載入中⋯</div></div>
+  </aside>
 
-<footer id="footer"></footer>
+  <main class="content">
+    <div id="newsContent">
+      <div class="state-msg"><strong>載入中⋯</strong>正在從試算表讀取資料</div>
+    </div>
+  </main>
+</div>
+
+<footer>每日熱點 Daily Brief · 資料由 Claude AI 自動整理 · 來源：Google 試算表</footer>
 
 <script>
+  // ── 設定：你的試算表 ID ──
+  const SHEET_ID = '1iimFj_-tx0OZDmC0RO6N5G7MxHAakjzYoBcbPmeHiK8';
+
   const RANK_COLORS = [
     '#e63946','#f4803a','#f9b233','#4caf7d','#2196f3',
     '#9c27b0','#00bcd4','#ff5722','#607d8b','#795548'
   ];
 
-  function formatDate(d) {
-    return d.toLocaleDateString('zh-TW', { year:'numeric', month:'long', day:'numeric', weekday:'long' });
+  function escHtml(str) {
+    return (str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  function renderNews(data) {
-    const list = document.getElementById('newsList');
-    const today = new Date();
+  // 從試算表 CSV 解析資料，依日期分組
+  function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    const byDate = {};
 
-    document.getElementById('headerDate').textContent = formatDate(today);
-    document.getElementById('footer').textContent =
-      `每日熱點 · ${today.getFullYear()} · 資料由 Claude AI 自動整理`;
+    for (let i = 1; i < lines.length; i++) {
+      // 處理 CSV 欄位（含逗號的欄位用引號包住）
+      const cols = [];
+      let cur = '', inQ = false;
+      for (const ch of lines[i]) {
+        if (ch === '"') { inQ = !inQ; }
+        else if (ch === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+        else { cur += ch; }
+      }
+      cols.push(cur.trim());
 
-    if (!data || data.length === 0) {
-      list.innerHTML = '<div class="state-msg"><strong>暫無資料</strong>請確認 daily_news.json 已正確產生</div>';
-      return;
+      const [date, rank, title, description, source] = cols;
+      if (!date || !title) continue;
+
+      if (!byDate[date]) byDate[date] = [];
+      byDate[date].push({
+        rank: parseInt(rank) || byDate[date].length + 1,
+        title, description, source
+      });
     }
 
-    list.innerHTML = data.map((item, i) => {
-      const color = RANK_COLORS[i] || '#888';
+    // 依日期由新到舊排序
+    const sorted = Object.keys(byDate).sort((a, b) => {
+      const toMs = d => new Date(d.replace(/\//g, '-')).getTime();
+      return toMs(b) - toMs(a);
+    });
+
+    return sorted.map(date => ({ date, items: byDate[date] }));
+  }
+
+  let allData = [];
+  let activeDate = null;
+
+  function renderSidebar(activeD) {
+    const container = document.getElementById('dateList');
+    container.innerHTML = allData.map(({ date, items }) => {
+      const isActive = date === activeD;
+      const headline = items[0]?.title || '（無資料）';
       return `
-        <article class="news-card">
-          <div class="rank-col">
-            <div class="rank-num" style="color:${color}">${item.rank}</div>
-            <div class="rank-bar" style="background:${color}; opacity:0.25;"></div>
-          </div>
-          <div class="content-col">
-            <div class="news-source">${escHtml(item.source || '')}</div>
-            <div class="news-title">${escHtml(item.title || '')}</div>
-            <div class="news-desc">${escHtml(item.description || '')}</div>
-          </div>
-        </article>`;
+        <div class="date-card ${isActive ? 'active' : ''}" onclick="showDate('${date}')">
+          <div class="date-card-accent"></div>
+          <div class="date-card-date">${date}</div>
+          <div class="date-card-headline">${escHtml(headline)}</div>
+          <div class="date-card-count">共 ${items.length} 則報導</div>
+        </div>`;
     }).join('');
   }
 
-  function escHtml(str) {
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  function renderNews(date, items) {
+    document.getElementById('headerDate').textContent = date;
+    document.getElementById('newsContent').innerHTML = `
+      <div class="content-header">
+        <div class="content-date-label">${date}</div>
+        <div class="content-count-label">前 ${items.length} 大熱點</div>
+      </div>
+      <div class="section-label">今日焦點報導</div>
+      <div class="news-list">
+        ${items.map((item, i) => {
+          const color = RANK_COLORS[i] || '#888';
+          // 判斷 source 是否為網址
+          const isUrl = (item.source||'').startsWith('http');
+          const sourceLabel = isUrl
+            ? new URL(item.source).hostname.replace('www.','')
+            : (item.source || '');
+          const titleHtml = isUrl
+            ? `<a href="${escHtml(item.source)}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">${escHtml(item.title)}</a>`
+            : escHtml(item.title);
+          return `
+            <article class="news-card">
+              <div class="rank-col">
+                <div class="rank-num" style="color:${color}">${item.rank}</div>
+                <div class="rank-bar" style="background:${color};opacity:0.2;"></div>
+              </div>
+              <div>
+                <div class="news-source">${escHtml(sourceLabel)}</div>
+                <div class="news-title">${titleHtml}</div>
+                <div class="news-desc">${escHtml(item.description)}</div>
+              </div>
+            </article>`;
+        }).join('')}
+      </div>`;
   }
 
-  // 讀取同目錄下的 daily_news.json
-  fetch('daily_news.json')
-    .then(r => {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.json();
-    })
-    .then(renderNews)
-    .catch(err => {
-      document.getElementById('newsList').innerHTML =
-        `<div class="state-msg"><strong>無法載入資料</strong>請將 daily_news.json 放在與此 HTML 相同的資料夾中<br><small style="color:#aaa">${err.message}</small></div>`;
-      document.getElementById('headerDate').textContent = formatDate(new Date());
-    });
+  function showDate(date) {
+    activeDate = date;
+    const found = allData.find(d => d.date === date);
+    if (found) {
+      renderSidebar(date);
+      renderNews(date, found.items);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  async function init() {
+    try {
+      const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=工作表1`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('無法讀取試算表，請確認已設為公開');
+      const text = await res.text();
+      allData = parseCSV(text);
+
+      if (allData.length === 0) throw new Error('試算表沒有資料');
+
+      renderSidebar(allData[0].date);
+      renderNews(allData[0].date, allData[0].items);
+    } catch (err) {
+      document.getElementById('dateList').innerHTML =
+        `<div style="font-size:0.75rem;color:#c00;padding:0.5rem 0;">${err.message}</div>`;
+      document.getElementById('newsContent').innerHTML =
+        `<div class="state-msg"><strong>載入失敗</strong>${err.message}</div>`;
+    }
+  }
+
+  init();
 </script>
 </body>
 </html>
