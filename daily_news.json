@@ -1,0 +1,62 @@
+[
+  {
+    "rank": 1,
+    "title": "菲律賓南部7.8強震致32死逾200傷，引發海嘯",
+    "description": "菲律賓棉蘭老島附近海域發生7.8級地震，至少32人罹難、200人受傷，並引發近1公尺海嘯衝擊沿岸地區。當局警告死亡人數可能持續上升，偏遠村落救援尚未抵達。",
+    "source": "https://www.cnn.com/2026/06/07/asia/southern-philippines-mindanao-earthquake-intl-hnk"
+  },
+  {
+    "rank": 2,
+    "title": "以色列與伊朗互相攻擊後暫時停火，特朗普斡旋居功",
+    "description": "以色列空襲貝魯特後伊朗報復，雙方交火持續一夜後在特朗普呼籲下暫停敵對行動。目前停火狀態脆弱，中東局勢仍高度緊張。",
+    "source": "https://www.npr.org/2026/06/08/g-s1-126858/up-first-newsletter-iran-lebanon-israel-trump-meet-the-press-interview-congo-ebola"
+  },
+  {
+    "rank": 3,
+    "title": "習近平訪問平壤，強化中朝戰略同盟關係",
+    "description": "中國國家主席習近平出訪北韓首都平壤，此行被認為是重申中國對北韓的獨特影響力，並鞏固社會主義陣營關係。",
+    "source": "https://www.foreignexchanges.news/p/world-roundup-june-8-2026"
+  },
+  {
+    "rank": 4,
+    "title": "剛果伊波拉疫情蔓延速度創歷史新高，已波及烏干達",
+    "description": "非洲疾控中心警告，剛果民主共和國伊波拉疫情傳播速度超越2014年西非大流行初期，截至6月8日已確認515例、91人死亡，且所涉病毒株目前無疫苗可用。",
+    "source": "https://www.cdc.gov/ebola/situation-summary/index.html"
+  },
+  {
+    "rank": 5,
+    "title": "秘魯總統大選左右兩強票數幾乎持平，結果懸而未決",
+    "description": "秘魯總統選舉呈現左翼與右翼候選人伯仲之間的態勢，計票結果極為膠著，最終歸屬尚未明朗，引發全球對拉美政局走向的關注。",
+    "source": "https://www.aljazeera.com/news/2026/6/8/race-tied-between-left-and-right-wing-rivals-in-perus-presidential-vote"
+  },
+  {
+    "rank": 6,
+    "title": "美法院裁定特朗普10萬美元H-1B簽證費違憲",
+    "description": "聯邦法官裁定特朗普政府對H-1B科技工作簽證徵收10萬美元費用違憲，視之為未經國會授權的稅收，此判決影響美國科技業人才引進政策。",
+    "source": "https://www.foxnews.com/politics/federal-judge-strikes-trumps-100k-h-1b-visa-fee-ruling-unconstitutional-tax"
+  },
+  {
+    "rank": 7,
+    "title": "WTO：AI投資帶動全球貿易成長，抵銷關稅戰衝擊",
+    "description": "世界貿易組織報告指出，AI相關貿易（伺服器、半導體、資料中心設備）2025年成長近40%，遠超全球貿易平均6.5%增速，成為支撐全球貿易的關鍵動力。",
+    "source": "https://www.pymnts.com/news/artificial-intelligence/2026/wto-says-ai-investment-keeps-global-trade-above-trend-despite-war"
+  },
+  {
+    "rank": 8,
+    "title": "AI大規模投資推升通膨，全球首席經濟學家警告成長放緩",
+    "description": "美聯儲官員與華爾街分析師指出AI基礎建設的鉅額投資正推高美國通膨，94%受訪首席經濟學家預測未來一年全球通膨將上升，近九成預期全球經濟成長趨緩。",
+    "source": "https://www.washingtonpost.com/technology/2026/06/06/inflation-is-being-driven-up-by-huge-investment-artificial-intelligence/"
+  },
+  {
+    "rank": 9,
+    "title": "美國NBA總冠軍賽：特朗普出席麥迪遜廣場花園引發兩極反應",
+    "description": "美國總統特朗普出席在紐約麥迪遜廣場花園舉行的NBA總決賽第三場（尼克斯對馬刺），現場觀眾反應兩極，與早前出席美式足球賽時的場面形成強烈對比。",
+    "source": "https://www.foxnews.com/sports/trump-draws-much-different-reaction-nba-finals-cfp-national-title-game"
+  },
+  {
+    "rank": 10,
+    "title": "洛杉磯市長選舉膠著：進步派市議員拉曼微幅領先史賓賽普拉特",
+    "description": "洛杉磯市長補選計票結果顯示，進步派市議員尼夏·拉曼以極微差距領先真人秀明星史賓賽·普拉特，但美聯社尚未宣布最終勝選者。",
+    "source": "https://www.foxnews.com/politics/raman-overtakes-spencer-pratt-razor-thin-race-ap-count-shows-race-remains-uncalled"
+  }
+]
