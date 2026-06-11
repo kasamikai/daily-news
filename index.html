@@ -269,10 +269,50 @@
     margin-bottom: 0.45rem;
   }
 
+  /* 標題連結樣式 */
+  .news-title a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s, color 0.15s;
+  }
+
+  .news-title a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .news-title a::after {
+    content: ' ↗';
+    font-size: 0.75em;
+    opacity: 0;
+    transition: opacity 0.15s;
+    font-family: sans-serif;
+  }
+
+  .news-title a:hover::after {
+    opacity: 1;
+  }
+
   .news-desc {
     font-size: 0.86rem;
     color: #444;
     line-height: 1.8;
+  }
+
+  .search-hint {
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-top: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .search-hint svg {
+    width: 12px;
+    height: 12px;
+    opacity: 0.5;
   }
 
   .state-msg {
@@ -342,7 +382,7 @@
   </main>
 </div>
 
-<footer>每日熱點 Daily Brief · 資料由 Gemini AI 自動整理 · 每天自動更新</footer>
+<footer>每日熱點 Daily Brief · 資料由 AI 自動整理 · 點擊標題可搜尋相關新聞</footer>
 
 <script>
   const SHEET_ID = '1iimFj_-tx0OZDmC0RO6N5G7MxHAakjzYoBcbPmeHiK8';
@@ -355,7 +395,10 @@
     return (str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  // 讀取單一頁籤的 CSV
+  function googleNewsUrl(title) {
+    return 'https://news.google.com/search?q=' + encodeURIComponent(title) + '&hl=zh-TW&gl=TW&ceid=TW:zh-Hant';
+  }
+
   async function fetchSheet(sheetName) {
     const encoded = encodeURIComponent(sheetName);
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encoded}`;
@@ -364,9 +407,8 @@
     return res.text();
   }
 
-  // 解析 CSV 為新聞陣列
   function parseCSV(text) {
-    const lines = text.trim().split('\n').slice(1); // 跳過標題列
+    const lines = text.trim().split('\n').slice(1);
     return lines.map(line => {
       const cols = [];
       let cur = '', inQ = false;
@@ -385,7 +427,7 @@
     }).filter(item => item.title);
   }
 
-  let allData = []; // [{ date, items, loaded }]
+  let allData = [];
   let activeDate = null;
 
   function renderSidebar(activeD) {
@@ -416,10 +458,11 @@
         <div class="content-date-label">${date}</div>
         <div class="content-count-label">前 ${items.length} 大熱點</div>
       </div>
-      <div class="section-label">今日焦點報導</div>
+      <div class="section-label">今日焦點報導 · 點擊標題搜尋相關新聞</div>
       <div class="news-list">
         ${items.map((item, i) => {
           const color = RANK_COLORS[i] || '#888';
+          const searchUrl = googleNewsUrl(item.title);
           return `
             <article class="news-card">
               <div class="rank-col">
@@ -428,8 +471,16 @@
               </div>
               <div>
                 <div class="news-source">${escHtml(item.source)}</div>
-                <div class="news-title">${escHtml(item.title)}</div>
+                <div class="news-title">
+                  <a href="${escHtml(searchUrl)}" target="_blank" rel="noopener">${escHtml(item.title)}</a>
+                </div>
                 <div class="news-desc">${escHtml(item.description)}</div>
+                <div class="search-hint">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                  </svg>
+                  點擊標題在 Google 新聞搜尋相關報導
+                </div>
               </div>
             </article>`;
         }).join('')}
@@ -443,7 +494,6 @@
     const found = allData.find(d => d.date === date);
     if (!found) return;
 
-    // 如果尚未載入該日期資料，現在才載入
     if (!found.items) {
       document.getElementById('newsContent').innerHTML =
         '<div class="state-msg"><strong>載入中⋯</strong></div>';
@@ -462,20 +512,17 @@
 
   async function init() {
     try {
-      // 1. 讀取 _index 頁籤取得所有日期
       const indexCSV = await fetchSheet('_index');
       const dates = indexCSV.trim().split('\n')
-        .slice(1) // 跳過標題 "dates"
+        .slice(1)
         .map(l => l.replace(/"/g, '').trim())
         .filter(d => d.match(/^\d{4}\/\d+\/\d+$/))
         .sort().reverse();
 
-      if (dates.length === 0) throw new Error('_index 頁籤沒有日期資料');
+      if (dates.length === 0) throw new Error('尚無新聞資料');
 
-      // 2. 建立資料結構（先不載入內容）
       allData = dates.map(date => ({ date, items: null }));
 
-      // 3. 載入最新一天的資料並顯示
       const latest = allData[0];
       const csv = await fetchSheet(latest.date);
       latest.items = parseCSV(csv);
