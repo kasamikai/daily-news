@@ -30,7 +30,6 @@
     flex-direction: column;
   }
 
-  /* ── HEADER ── */
   header {
     background: var(--header-bg);
     color: #fff;
@@ -58,7 +57,6 @@
   }
 
   .masthead span { color: var(--accent); }
-
   .header-meta { text-align: right; }
 
   .header-date {
@@ -74,7 +72,6 @@
     margin-top: 0.2rem;
   }
 
-  /* ── 類別切換列 ── */
   .category-bar {
     background: #1a2a38;
     border-bottom: 1px solid rgba(255,255,255,0.06);
@@ -114,7 +111,6 @@
     border-bottom-color: var(--accent);
   }
 
-  /* ── LAYOUT ── */
   .layout {
     display: flex;
     flex: 1;
@@ -123,7 +119,6 @@
     width: 100%;
   }
 
-  /* ── SIDEBAR ── */
   .sidebar {
     width: 240px;
     flex-shrink: 0;
@@ -192,7 +187,6 @@
 
   .date-card.active .date-card-count { color: rgba(255,255,255,0.4); }
 
-  /* ── MAIN ── */
   .content {
     flex: 1;
     padding: 2rem 2.5rem 4rem;
@@ -232,7 +226,6 @@
     margin-bottom: 1.5rem;
   }
 
-  /* ── NEWS CARDS ── */
   .news-list { display: flex; flex-direction: column; }
 
   .news-card {
@@ -318,7 +311,6 @@
     line-height: 1.75;
   }
 
-  /* ── STATE ── */
   .state-msg {
     text-align: center;
     padding: 4rem 2rem;
@@ -373,14 +365,14 @@
   </div>
 </header>
 
-<!-- 類別切換列 -->
 <div class="category-bar">
-  <div class="category-bar-inner" id="categoryBar">
+  <div class="category-bar-inner">
     <button class="cat-btn active" onclick="selectCategory('國際新聞')">🌐 國際新聞</button>
     <button class="cat-btn" onclick="selectCategory('科技新聞')">💻 科技新聞</button>
     <button class="cat-btn" onclick="selectCategory('商業財經')">📈 商業財經</button>
     <button class="cat-btn" onclick="selectCategory('環境氣候')">🌿 環境氣候</button>
     <button class="cat-btn" onclick="selectCategory('教育相關')">📚 教育相關</button>
+    <button class="cat-btn" onclick="selectCategory('AI相關')">🤖 AI 相關</button>
   </div>
 </div>
 
@@ -404,19 +396,17 @@
     '#e63946','#f4803a','#f9b233','#4caf7d','#2196f3',
     '#9c27b0','#00bcd4','#ff5722','#607d8b','#795548'
   ];
-
   const CATEGORY_ICONS = {
-    '國際新聞': '🌐', '科技新聞': '💻', '商業財經': '📈',
-    '環境氣候': '🌿', '教育相關': '📚'
+    '國際新聞':'🌐','科技新聞':'💻','商業財經':'📈',
+    '環境氣候':'🌿','教育相關':'📚','AI相關':'🤖'
   };
 
   function escHtml(str) {
     return (str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  // 資料結構：{ date: { category: items[] } }
-  let indexData = []; // [{ date, categories: [] }]
-  let cache = {};     // cache[date][category] = items
+  let indexData = [];
+  let cache = {};
   let activeDate = null;
   let activeCategory = '國際新聞';
 
@@ -451,7 +441,6 @@
 
   function renderSidebar() {
     const container = document.getElementById('dateList');
-    // 只顯示有目前選定類別的日期
     const available = indexData.filter(d => d.categories.includes(activeCategory));
     if (available.length === 0) {
       container.innerHTML = '<div style="font-size:0.78rem;color:var(--muted);padding:0.5rem 0;">此類別暫無資料</div>';
@@ -463,25 +452,23 @@
         <div class="date-card ${isActive ? 'active' : ''}" onclick="selectDate('${date}')">
           <div class="date-card-accent"></div>
           <div class="date-card-date">${date}</div>
-          <div class="date-card-count">${CATEGORY_ICONS[activeCategory] || ''} ${activeCategory}</div>
+          <div class="date-card-count">${CATEGORY_ICONS[activeCategory]||''} ${activeCategory}</div>
         </div>`;
     }).join('');
   }
 
   function renderNews(items) {
-    const titleLabel = (CATEGORY_ICONS[activeCategory] || '') + ' ' + activeCategory;
     document.getElementById('headerDate').textContent = activeDate + ' · ' + activeCategory;
-
     if (!items || items.length === 0) {
       document.getElementById('newsContent').innerHTML =
-        '<div class="state-msg"><strong>暫無資料</strong>此日期尚無' + activeCategory + '記錄</div>';
+        `<div class="state-msg"><strong>暫無資料</strong>此日期尚無${activeCategory}記錄</div>`;
       return;
     }
-
+    const icon = CATEGORY_ICONS[activeCategory] || '';
     document.getElementById('newsContent').innerHTML = `
       <div class="content-header">
         <div class="content-title">${activeDate}</div>
-        <div class="content-subtitle">${titleLabel} · 前 ${items.length} 大熱點</div>
+        <div class="content-subtitle">${icon} ${activeCategory} · 前 ${items.length} 大熱點</div>
       </div>
       <div class="section-label">今日焦點報導 · 點擊標題查看原始新聞</div>
       <div class="news-list">
@@ -512,8 +499,7 @@
       document.getElementById('newsContent').innerHTML =
         '<div class="state-msg"><strong>載入中⋯</strong></div>';
       try {
-        const sheetName = date + '_' + category;
-        const csv = await fetchSheet(sheetName);
+        const csv = await fetchSheet(date + '_' + category);
         cache[date][category] = parseCSV(csv);
       } catch(e) {
         cache[date][category] = [];
@@ -531,39 +517,29 @@
 
   async function selectCategory(category) {
     activeCategory = category;
-
-    // 更新類別按鈕
     document.querySelectorAll('.cat-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.textContent.includes(category));
+      btn.classList.toggle('active', btn.textContent.includes(category.replace('AI相關','AI')));
     });
-
-    // 找有此類別的最新日期
     const available = indexData.filter(d => d.categories.includes(category));
-    if (available.length > 0) {
-      activeDate = available[0].date;
-    }
-
+    activeDate = available.length > 0 ? available[0].date : null;
     renderSidebar();
     if (activeDate) {
       await loadAndShow(activeDate, activeCategory);
     } else {
       document.getElementById('newsContent').innerHTML =
-        '<div class="state-msg"><strong>暫無資料</strong>此類別尚無新聞記錄</div>';
+        `<div class="state-msg"><strong>暫無資料</strong>此類別尚無新聞記錄</div>`;
     }
   }
 
   async function init() {
     try {
-      // 讀取 _index
       const indexCSV = await fetchSheet('_index');
       const lines = indexCSV.trim().split('\n').slice(1);
-
-      // 整理成 [{ date, categories[] }]
       const dateMap = {};
       lines.forEach(line => {
         const cols = line.replace(/"/g, '').split(',');
-        const date = (cols[0] || '').trim();
-        const cat = (cols[1] || '').trim();
+        const date = (cols[0]||'').trim();
+        const cat = (cols[1]||'').trim();
         if (!date || !cat) return;
         if (!dateMap[date]) dateMap[date] = [];
         if (!dateMap[date].includes(cat)) dateMap[date].push(cat);
@@ -574,10 +550,9 @@
 
       if (indexData.length === 0) throw new Error('尚無新聞資料');
 
-      // 預設顯示最新日期的國際新聞
-      const firstWithIntl = indexData.find(d => d.categories.includes('國際新聞'));
-      activeDate = firstWithIntl ? firstWithIntl.date : indexData[0].date;
-      if (!firstWithIntl) activeCategory = indexData[0].categories[0];
+      const firstWithCat = indexData.find(d => d.categories.includes('國際新聞'));
+      activeDate = firstWithCat ? firstWithCat.date : indexData[0].date;
+      if (!firstWithCat) activeCategory = indexData[0].categories[0];
 
       renderSidebar();
       await loadAndShow(activeDate, activeCategory);
