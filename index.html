@@ -30,7 +30,6 @@
     flex-direction: column;
   }
 
-  /* ── HEADER ── */
   header {
     background: var(--header-bg);
     color: #fff;
@@ -84,7 +83,6 @@
     text-transform: uppercase;
   }
 
-  /* ── LAYOUT ── */
   .layout {
     display: flex;
     flex: 1;
@@ -93,7 +91,6 @@
     width: 100%;
   }
 
-  /* ── SIDEBAR ── */
   .sidebar {
     width: 260px;
     flex-shrink: 0;
@@ -177,7 +174,6 @@
 
   .date-card.active .date-card-count { color: rgba(255,255,255,0.35); }
 
-  /* ── MAIN ── */
   .content {
     flex: 1;
     padding: 2rem 2.5rem 4rem;
@@ -217,7 +213,6 @@
     margin-bottom: 1.5rem;
   }
 
-  /* ── NEWS CARD ── */
   .news-list { display: flex; flex-direction: column; }
 
   .news-card {
@@ -280,7 +275,6 @@
     line-height: 1.8;
   }
 
-  /* ── STATE ── */
   .state-msg {
     text-align: center;
     padding: 4rem 2rem;
@@ -295,7 +289,6 @@
     margin-bottom: 0.5rem;
   }
 
-  /* ── FOOTER ── */
   footer {
     text-align: center;
     padding: 1rem;
@@ -342,7 +335,6 @@
     <div class="sidebar-label">歷史日期</div>
     <div id="dateList"><div style="font-size:0.8rem;color:var(--muted);padding:0.5rem 0;">載入中⋯</div></div>
   </aside>
-
   <main class="content">
     <div id="newsContent">
       <div class="state-msg"><strong>載入中⋯</strong>正在從試算表讀取資料</div>
@@ -350,12 +342,10 @@
   </main>
 </div>
 
-<footer>每日熱點 Daily Brief · 資料由 Claude AI 自動整理 · 來源：Google 試算表</footer>
+<footer>每日熱點 Daily Brief · 資料由 Gemini AI 自動整理 · 每天自動更新</footer>
 
 <script>
-  // ── 設定：你的試算表 ID ──
   const SHEET_ID = '1iimFj_-tx0OZDmC0RO6N5G7MxHAakjzYoBcbPmeHiK8';
-
   const RANK_COLORS = [
     '#e63946','#f4803a','#f9b233','#4caf7d','#2196f3',
     '#9c27b0','#00bcd4','#ff5722','#607d8b','#795548'
@@ -365,61 +355,62 @@
     return (str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  // 從試算表 CSV 解析資料，依日期分組
-  function parseCSV(text) {
-    const lines = text.trim().split('\n');
-    const byDate = {};
+  // 讀取單一頁籤的 CSV
+  async function fetchSheet(sheetName) {
+    const encoded = encodeURIComponent(sheetName);
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encoded}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('無法讀取頁籤：' + sheetName);
+    return res.text();
+  }
 
-    for (let i = 1; i < lines.length; i++) {
-      // 處理 CSV 欄位（含逗號的欄位用引號包住）
+  // 解析 CSV 為新聞陣列
+  function parseCSV(text) {
+    const lines = text.trim().split('\n').slice(1); // 跳過標題列
+    return lines.map(line => {
       const cols = [];
       let cur = '', inQ = false;
-      for (const ch of lines[i]) {
+      for (const ch of line) {
         if (ch === '"') { inQ = !inQ; }
         else if (ch === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
         else { cur += ch; }
       }
       cols.push(cur.trim());
-
-      const [date, rank, title, description, source] = cols;
-      if (!date || !title) continue;
-
-      if (!byDate[date]) byDate[date] = [];
-      byDate[date].push({
-        rank: parseInt(rank) || byDate[date].length + 1,
-        title, description, source
-      });
-    }
-
-    // 依日期由新到舊排序
-    const sorted = Object.keys(byDate).sort((a, b) => {
-      const toMs = d => new Date(d.replace(/\//g, '-')).getTime();
-      return toMs(b) - toMs(a);
-    });
-
-    return sorted.map(date => ({ date, items: byDate[date] }));
+      return {
+        rank: parseInt(cols[1]) || 0,
+        title: cols[2] || '',
+        description: cols[3] || '',
+        source: cols[4] || ''
+      };
+    }).filter(item => item.title);
   }
 
-  let allData = [];
+  let allData = []; // [{ date, items, loaded }]
   let activeDate = null;
 
   function renderSidebar(activeD) {
     const container = document.getElementById('dateList');
     container.innerHTML = allData.map(({ date, items }) => {
       const isActive = date === activeD;
-      const headline = items[0]?.title || '（無資料）';
+      const headline = items?.[0]?.title || '載入中⋯';
+      const count = items ? items.length : '—';
       return `
         <div class="date-card ${isActive ? 'active' : ''}" onclick="showDate('${date}')">
           <div class="date-card-accent"></div>
           <div class="date-card-date">${date}</div>
           <div class="date-card-headline">${escHtml(headline)}</div>
-          <div class="date-card-count">共 ${items.length} 則報導</div>
+          <div class="date-card-count">共 ${count} 則報導</div>
         </div>`;
     }).join('');
   }
 
   function renderNews(date, items) {
     document.getElementById('headerDate').textContent = date;
+    if (!items || items.length === 0) {
+      document.getElementById('newsContent').innerHTML =
+        '<div class="state-msg"><strong>無資料</strong>此日期尚無新聞記錄</div>';
+      return;
+    }
     document.getElementById('newsContent').innerHTML = `
       <div class="content-header">
         <div class="content-date-label">${date}</div>
@@ -429,14 +420,6 @@
       <div class="news-list">
         ${items.map((item, i) => {
           const color = RANK_COLORS[i] || '#888';
-          // 判斷 source 是否為網址
-          const isUrl = (item.source||'').startsWith('http');
-          const sourceLabel = isUrl
-            ? new URL(item.source).hostname.replace('www.','')
-            : (item.source || '');
-          const titleHtml = isUrl
-            ? `<a href="${escHtml(item.source)}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">${escHtml(item.title)}</a>`
-            : escHtml(item.title);
           return `
             <article class="news-card">
               <div class="rank-col">
@@ -444,8 +427,8 @@
                 <div class="rank-bar" style="background:${color};opacity:0.2;"></div>
               </div>
               <div>
-                <div class="news-source">${escHtml(sourceLabel)}</div>
-                <div class="news-title">${titleHtml}</div>
+                <div class="news-source">${escHtml(item.source)}</div>
+                <div class="news-title">${escHtml(item.title)}</div>
                 <div class="news-desc">${escHtml(item.description)}</div>
               </div>
             </article>`;
@@ -453,29 +436,55 @@
       </div>`;
   }
 
-  function showDate(date) {
+  async function showDate(date) {
     activeDate = date;
+    renderSidebar(date);
+
     const found = allData.find(d => d.date === date);
-    if (found) {
+    if (!found) return;
+
+    // 如果尚未載入該日期資料，現在才載入
+    if (!found.items) {
+      document.getElementById('newsContent').innerHTML =
+        '<div class="state-msg"><strong>載入中⋯</strong></div>';
+      try {
+        const csv = await fetchSheet(date);
+        found.items = parseCSV(csv);
+      } catch(e) {
+        found.items = [];
+      }
       renderSidebar(date);
-      renderNews(date, found.items);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    renderNews(date, found.items);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   async function init() {
     try {
-      const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=工作表1`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('無法讀取試算表，請確認已設為公開');
-      const text = await res.text();
-      allData = parseCSV(text);
+      // 1. 讀取 _index 頁籤取得所有日期
+      const indexCSV = await fetchSheet('_index');
+      const dates = indexCSV.trim().split('\n')
+        .slice(1) // 跳過標題 "dates"
+        .map(l => l.replace(/"/g, '').trim())
+        .filter(d => d.match(/^\d{4}\/\d+\/\d+$/))
+        .sort().reverse();
 
-      if (allData.length === 0) throw new Error('試算表沒有資料');
+      if (dates.length === 0) throw new Error('_index 頁籤沒有日期資料');
 
-      renderSidebar(allData[0].date);
-      renderNews(allData[0].date, allData[0].items);
-    } catch (err) {
+      // 2. 建立資料結構（先不載入內容）
+      allData = dates.map(date => ({ date, items: null }));
+
+      // 3. 載入最新一天的資料並顯示
+      const latest = allData[0];
+      const csv = await fetchSheet(latest.date);
+      latest.items = parseCSV(csv);
+
+      renderSidebar(latest.date);
+      renderNews(latest.date, latest.items);
+      activeDate = latest.date;
+
+    } catch(err) {
       document.getElementById('dateList').innerHTML =
         `<div style="font-size:0.75rem;color:#c00;padding:0.5rem 0;">${err.message}</div>`;
       document.getElementById('newsContent').innerHTML =
