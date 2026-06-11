@@ -30,6 +30,7 @@
     flex-direction: column;
   }
 
+  /* ── HEADER ── */
   header {
     background: var(--header-bg);
     color: #fff;
@@ -40,7 +41,7 @@
   .header-inner {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem 0 1.5rem;
+    padding: 1.5rem 0 1.2rem;
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
@@ -51,7 +52,7 @@
 
   .masthead {
     font-family: 'DM Serif Display', 'Noto Serif TC', serif;
-    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
     letter-spacing: -0.02em;
     line-height: 1;
   }
@@ -61,28 +62,59 @@
   .header-meta { text-align: right; }
 
   .header-date {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: rgba(255,255,255,0.45);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  .header-tagline {
-    font-size: 0.7rem;
-    color: rgba(255,255,255,0.25);
-    margin-top: 0.2rem;
-  }
-
-  .header-strip {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0.6rem 0;
-    font-size: 0.68rem;
-    color: rgba(255,255,255,0.3);
     letter-spacing: 0.1em;
     text-transform: uppercase;
   }
 
+  .header-tagline {
+    font-size: 0.68rem;
+    color: rgba(255,255,255,0.25);
+    margin-top: 0.2rem;
+  }
+
+  /* ── 類別切換列 ── */
+  .category-bar {
+    background: #1a2a38;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .category-bar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .category-bar-inner::-webkit-scrollbar { display: none; }
+
+  .cat-btn {
+    padding: 0.75rem 1.2rem;
+    font-size: 0.78rem;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: 400;
+    color: rgba(255,255,255,0.45);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+  }
+
+  .cat-btn:hover { color: rgba(255,255,255,0.8); }
+
+  .cat-btn.active {
+    color: #fff;
+    border-bottom-color: var(--accent);
+  }
+
+  /* ── LAYOUT ── */
   .layout {
     display: flex;
     flex: 1;
@@ -91,20 +123,21 @@
     width: 100%;
   }
 
+  /* ── SIDEBAR ── */
   .sidebar {
-    width: 260px;
+    width: 240px;
     flex-shrink: 0;
     background: var(--sidebar-bg);
     border-right: 1px solid var(--rule);
     padding: 1.5rem 1rem;
     overflow-y: auto;
-    max-height: calc(100vh - 110px);
+    max-height: calc(100vh - 130px);
     position: sticky;
     top: 0;
   }
 
   .sidebar-label {
-    font-size: 0.65rem;
+    font-size: 0.63rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--muted);
@@ -117,8 +150,8 @@
     background: #fff;
     border: 1px solid var(--rule);
     border-radius: 6px;
-    padding: 0.85rem 1rem;
-    margin-bottom: 0.6rem;
+    padding: 0.8rem 0.9rem;
+    margin-bottom: 0.5rem;
     cursor: pointer;
     transition: all 0.15s;
     position: relative;
@@ -144,36 +177,22 @@
   .date-card.active .date-card-accent { opacity: 1; }
 
   .date-card-date {
-    font-size: 0.7rem;
-    letter-spacing: 0.06em;
-    color: var(--muted);
-    margin-bottom: 0.3rem;
-  }
-
-  .date-card.active .date-card-date { color: rgba(255,255,255,0.45); }
-
-  .date-card-headline {
-    font-family: 'Noto Serif TC', serif;
-    font-size: 0.82rem;
-    font-weight: 700;
-    line-height: 1.45;
+    font-size: 0.75rem;
+    font-weight: 500;
     color: var(--ink);
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    margin-bottom: 0.2rem;
   }
 
-  .date-card.active .date-card-headline { color: #fff; }
+  .date-card.active .date-card-date { color: #fff; }
 
   .date-card-count {
     font-size: 0.62rem;
     color: var(--muted);
-    margin-top: 0.35rem;
   }
 
-  .date-card.active .date-card-count { color: rgba(255,255,255,0.35); }
+  .date-card.active .date-card-count { color: rgba(255,255,255,0.4); }
 
+  /* ── MAIN ── */
   .content {
     flex: 1;
     padding: 2rem 2.5rem 4rem;
@@ -191,12 +210,12 @@
     gap: 0.5rem;
   }
 
-  .content-date-label {
+  .content-title {
     font-family: 'DM Serif Display', serif;
-    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    font-size: clamp(1.2rem, 3vw, 1.7rem);
   }
 
-  .content-count-label {
+  .content-subtitle {
     font-size: 0.7rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -204,7 +223,7 @@
   }
 
   .section-label {
-    font-size: 0.65rem;
+    font-size: 0.63rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--muted);
@@ -213,13 +232,14 @@
     margin-bottom: 1.5rem;
   }
 
+  /* ── NEWS CARDS ── */
   .news-list { display: flex; flex-direction: column; }
 
   .news-card {
     display: grid;
     grid-template-columns: 3rem 1fr;
     gap: 0 1.5rem;
-    padding: 1.5rem 0;
+    padding: 1.4rem 0;
     border-bottom: 1px solid var(--rule);
     transition: background 0.12s;
   }
@@ -241,7 +261,7 @@
 
   .rank-num {
     font-family: 'DM Serif Display', serif;
-    font-size: 1.45rem;
+    font-size: 1.4rem;
     line-height: 1;
     margin-bottom: 0.4rem;
   }
@@ -249,32 +269,31 @@
   .rank-bar {
     width: 3px;
     flex: 1;
-    min-height: 36px;
+    min-height: 32px;
     border-radius: 2px;
   }
 
   .news-source {
-    font-size: 0.62rem;
+    font-size: 0.6rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--muted);
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.25rem;
   }
 
   .news-title {
     font-family: 'Noto Serif TC', serif;
-    font-size: clamp(0.98rem, 2vw, 1.12rem);
+    font-size: clamp(0.95rem, 2vw, 1.08rem);
     font-weight: 700;
     line-height: 1.5;
-    margin-bottom: 0.45rem;
+    margin-bottom: 0.4rem;
   }
 
-  /* 標題連結樣式 */
   .news-title a {
     color: inherit;
     text-decoration: none;
     border-bottom: 1px solid transparent;
-    transition: border-color 0.15s, color 0.15s;
+    transition: color 0.15s, border-color 0.15s;
   }
 
   .news-title a:hover {
@@ -284,37 +303,22 @@
 
   .news-title a::after {
     content: ' ↗';
-    font-size: 0.75em;
+    font-size: 0.72em;
     opacity: 0;
     transition: opacity 0.15s;
     font-family: sans-serif;
+    font-weight: 300;
   }
 
-  .news-title a:hover::after {
-    opacity: 1;
-  }
+  .news-title a:hover::after { opacity: 1; }
 
   .news-desc {
-    font-size: 0.86rem;
-    color: #444;
-    line-height: 1.8;
+    font-size: 0.84rem;
+    color: #555;
+    line-height: 1.75;
   }
 
-  .search-hint {
-    font-size: 0.7rem;
-    color: var(--muted);
-    margin-top: 0.4rem;
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-  }
-
-  .search-hint svg {
-    width: 12px;
-    height: 12px;
-    opacity: 0.5;
-  }
-
+  /* ── STATE ── */
   .state-msg {
     text-align: center;
     padding: 4rem 2rem;
@@ -345,15 +349,15 @@
       max-height: none;
       position: static;
       display: flex;
-      gap: 0.6rem;
+      gap: 0.5rem;
       overflow-x: auto;
-      padding: 1rem;
+      padding: 0.8rem;
       border-right: none;
       border-bottom: 1px solid var(--rule);
     }
     .sidebar-label { display: none; }
-    .date-card { min-width: 170px; margin-bottom: 0; flex-shrink: 0; }
-    .content { padding: 1.5rem 1rem 3rem; }
+    .date-card { min-width: 120px; margin-bottom: 0; flex-shrink: 0; }
+    .content { padding: 1.2rem 1rem 3rem; }
   }
 </style>
 </head>
@@ -367,8 +371,18 @@
       <div class="header-tagline">Top 10 · Daily Brief</div>
     </div>
   </div>
-  <div class="header-strip">全球 &amp; 台灣 · 前十大熱門話題</div>
 </header>
+
+<!-- 類別切換列 -->
+<div class="category-bar">
+  <div class="category-bar-inner" id="categoryBar">
+    <button class="cat-btn active" onclick="selectCategory('國際新聞')">🌐 國際新聞</button>
+    <button class="cat-btn" onclick="selectCategory('科技新聞')">💻 科技新聞</button>
+    <button class="cat-btn" onclick="selectCategory('商業財經')">📈 商業財經</button>
+    <button class="cat-btn" onclick="selectCategory('環境氣候')">🌿 環境氣候</button>
+    <button class="cat-btn" onclick="selectCategory('教育相關')">📚 教育相關</button>
+  </div>
+</div>
 
 <div class="layout">
   <aside class="sidebar">
@@ -382,7 +396,7 @@
   </main>
 </div>
 
-<footer>每日熱點 Daily Brief · 資料由 AI 自動整理 · 點擊標題可搜尋相關新聞</footer>
+<footer>每日熱點 Daily Brief · 資料來源：Google News · 每天早上 8 點自動更新</footer>
 
 <script>
   const SHEET_ID = '1iimFj_-tx0OZDmC0RO6N5G7MxHAakjzYoBcbPmeHiK8';
@@ -391,19 +405,26 @@
     '#9c27b0','#00bcd4','#ff5722','#607d8b','#795548'
   ];
 
+  const CATEGORY_ICONS = {
+    '國際新聞': '🌐', '科技新聞': '💻', '商業財經': '📈',
+    '環境氣候': '🌿', '教育相關': '📚'
+  };
+
   function escHtml(str) {
     return (str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  function googleNewsUrl(title) {
-    return 'https://news.google.com/search?q=' + encodeURIComponent(title) + '&hl=zh-TW&gl=TW&ceid=TW:zh-Hant';
-  }
+  // 資料結構：{ date: { category: items[] } }
+  let indexData = []; // [{ date, categories: [] }]
+  let cache = {};     // cache[date][category] = items
+  let activeDate = null;
+  let activeCategory = '國際新聞';
 
   async function fetchSheet(sheetName) {
     const encoded = encodeURIComponent(sheetName);
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encoded}`;
     const res = await fetch(url);
-    if (!res.ok) throw new Error('無法讀取頁籤：' + sheetName);
+    if (!res.ok) throw new Error('無法讀取：' + sheetName);
     return res.text();
   }
 
@@ -422,47 +443,53 @@
         rank: parseInt(cols[1]) || 0,
         title: cols[2] || '',
         description: cols[3] || '',
-        source: cols[4] || ''
+        source: cols[4] || '',
+        link: cols[5] || ''
       };
-    }).filter(item => item.title);
+    }).filter(i => i.title);
   }
 
-  let allData = [];
-  let activeDate = null;
-
-  function renderSidebar(activeD) {
+  function renderSidebar() {
     const container = document.getElementById('dateList');
-    container.innerHTML = allData.map(({ date, items }) => {
-      const isActive = date === activeD;
-      const headline = items?.[0]?.title || '載入中⋯';
-      const count = items ? items.length : '—';
+    // 只顯示有目前選定類別的日期
+    const available = indexData.filter(d => d.categories.includes(activeCategory));
+    if (available.length === 0) {
+      container.innerHTML = '<div style="font-size:0.78rem;color:var(--muted);padding:0.5rem 0;">此類別暫無資料</div>';
+      return;
+    }
+    container.innerHTML = available.map(({ date }) => {
+      const isActive = date === activeDate;
       return `
-        <div class="date-card ${isActive ? 'active' : ''}" onclick="showDate('${date}')">
+        <div class="date-card ${isActive ? 'active' : ''}" onclick="selectDate('${date}')">
           <div class="date-card-accent"></div>
           <div class="date-card-date">${date}</div>
-          <div class="date-card-headline">${escHtml(headline)}</div>
-          <div class="date-card-count">共 ${count} 則報導</div>
+          <div class="date-card-count">${CATEGORY_ICONS[activeCategory] || ''} ${activeCategory}</div>
         </div>`;
     }).join('');
   }
 
-  function renderNews(date, items) {
-    document.getElementById('headerDate').textContent = date;
+  function renderNews(items) {
+    const titleLabel = (CATEGORY_ICONS[activeCategory] || '') + ' ' + activeCategory;
+    document.getElementById('headerDate').textContent = activeDate + ' · ' + activeCategory;
+
     if (!items || items.length === 0) {
       document.getElementById('newsContent').innerHTML =
-        '<div class="state-msg"><strong>無資料</strong>此日期尚無新聞記錄</div>';
+        '<div class="state-msg"><strong>暫無資料</strong>此日期尚無' + activeCategory + '記錄</div>';
       return;
     }
+
     document.getElementById('newsContent').innerHTML = `
       <div class="content-header">
-        <div class="content-date-label">${date}</div>
-        <div class="content-count-label">前 ${items.length} 大熱點</div>
+        <div class="content-title">${activeDate}</div>
+        <div class="content-subtitle">${titleLabel} · 前 ${items.length} 大熱點</div>
       </div>
-      <div class="section-label">今日焦點報導 · 點擊標題搜尋相關新聞</div>
+      <div class="section-label">今日焦點報導 · 點擊標題查看原始新聞</div>
       <div class="news-list">
         ${items.map((item, i) => {
           const color = RANK_COLORS[i] || '#888';
-          const searchUrl = googleNewsUrl(item.title);
+          const titleContent = item.link
+            ? `<a href="${escHtml(item.link)}" target="_blank" rel="noopener">${escHtml(item.title)}</a>`
+            : escHtml(item.title);
           return `
             <article class="news-card">
               <div class="rank-col">
@@ -471,65 +498,89 @@
               </div>
               <div>
                 <div class="news-source">${escHtml(item.source)}</div>
-                <div class="news-title">
-                  <a href="${escHtml(searchUrl)}" target="_blank" rel="noopener">${escHtml(item.title)}</a>
-                </div>
+                <div class="news-title">${titleContent}</div>
                 <div class="news-desc">${escHtml(item.description)}</div>
-                <div class="search-hint">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-                  </svg>
-                  點擊標題在 Google 新聞搜尋相關報導
-                </div>
               </div>
             </article>`;
         }).join('')}
       </div>`;
   }
 
-  async function showDate(date) {
-    activeDate = date;
-    renderSidebar(date);
-
-    const found = allData.find(d => d.date === date);
-    if (!found) return;
-
-    if (!found.items) {
+  async function loadAndShow(date, category) {
+    if (!cache[date]) cache[date] = {};
+    if (!cache[date][category]) {
       document.getElementById('newsContent').innerHTML =
         '<div class="state-msg"><strong>載入中⋯</strong></div>';
       try {
-        const csv = await fetchSheet(date);
-        found.items = parseCSV(csv);
+        const sheetName = date + '_' + category;
+        const csv = await fetchSheet(sheetName);
+        cache[date][category] = parseCSV(csv);
       } catch(e) {
-        found.items = [];
+        cache[date][category] = [];
       }
-      renderSidebar(date);
+    }
+    renderNews(cache[date][category]);
+  }
+
+  async function selectDate(date) {
+    activeDate = date;
+    renderSidebar();
+    await loadAndShow(date, activeCategory);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  async function selectCategory(category) {
+    activeCategory = category;
+
+    // 更新類別按鈕
+    document.querySelectorAll('.cat-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.textContent.includes(category));
+    });
+
+    // 找有此類別的最新日期
+    const available = indexData.filter(d => d.categories.includes(category));
+    if (available.length > 0) {
+      activeDate = available[0].date;
     }
 
-    renderNews(date, found.items);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    renderSidebar();
+    if (activeDate) {
+      await loadAndShow(activeDate, activeCategory);
+    } else {
+      document.getElementById('newsContent').innerHTML =
+        '<div class="state-msg"><strong>暫無資料</strong>此類別尚無新聞記錄</div>';
+    }
   }
 
   async function init() {
     try {
+      // 讀取 _index
       const indexCSV = await fetchSheet('_index');
-      const dates = indexCSV.trim().split('\n')
-        .slice(1)
-        .map(l => l.replace(/"/g, '').trim())
-        .filter(d => d.match(/^\d{4}\/\d+\/\d+$/))
-        .sort().reverse();
+      const lines = indexCSV.trim().split('\n').slice(1);
 
-      if (dates.length === 0) throw new Error('尚無新聞資料');
+      // 整理成 [{ date, categories[] }]
+      const dateMap = {};
+      lines.forEach(line => {
+        const cols = line.replace(/"/g, '').split(',');
+        const date = (cols[0] || '').trim();
+        const cat = (cols[1] || '').trim();
+        if (!date || !cat) return;
+        if (!dateMap[date]) dateMap[date] = [];
+        if (!dateMap[date].includes(cat)) dateMap[date].push(cat);
+      });
 
-      allData = dates.map(date => ({ date, items: null }));
+      indexData = Object.keys(dateMap).sort().reverse()
+        .map(date => ({ date, categories: dateMap[date] }));
 
-      const latest = allData[0];
-      const csv = await fetchSheet(latest.date);
-      latest.items = parseCSV(csv);
+      if (indexData.length === 0) throw new Error('尚無新聞資料');
 
-      renderSidebar(latest.date);
-      renderNews(latest.date, latest.items);
-      activeDate = latest.date;
+      // 預設顯示最新日期的國際新聞
+      const firstWithIntl = indexData.find(d => d.categories.includes('國際新聞'));
+      activeDate = firstWithIntl ? firstWithIntl.date : indexData[0].date;
+      if (!firstWithIntl) activeCategory = indexData[0].categories[0];
+
+      renderSidebar();
+      await loadAndShow(activeDate, activeCategory);
 
     } catch(err) {
       document.getElementById('dateList').innerHTML =
